@@ -9,16 +9,22 @@ requirements:
 inputs:
   satellite: 
     type: string
+  granule:
+    type: string
   sci: File
   diary: File
   adcs: File
   bus: File
   demlw_datadir: Directory
+  gdas1: File
+  gdas2: File
+  nise: File
+  sst: File
 
 outputs:
-  iff: 
+  cldmsk_l2: 
     type: File
-    outputSource: demlw/l1b
+    outputSource: mvcm/cldmsk_l2
 
 steps:
   viirsl1:
@@ -60,3 +66,15 @@ steps:
       l1b: iff/iff
       datadir: demlw_datadir
     out: [l1b]
+
+  mvcm:
+    run: ../tasks/mvcm/workflow.cwl
+    in:
+      satellite: satellite
+      granule: granule
+      gdas1: gdas1
+      gdas2: gdas2
+      l1b: demlw/l1b
+      nise: nise
+      sst: sst
+    out: [cldmsk_l2]

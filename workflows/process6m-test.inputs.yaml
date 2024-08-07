@@ -1,4 +1,5 @@
 satellite: noaa20
+granule: "2024-07-01 00:06:00"
 sci: 
   class: File
   path: ../inputs/P1590826VIIRSSCIENCE.dat
@@ -14,3 +15,15 @@ bus:
 demlw_datadir:
   class: Directory
   path: /mnt/software/support/demlw-static/0.2017.11.07/
+gdas1:
+  class: File
+  path: ../inputs/gdas1.PGrbF00.240701.00z
+gdas2:
+  class: File
+  path: ../inputs/gdas1.PGrbF00.240701.06z
+nise:
+  class: File
+  path: ../inputs/NISE_SSMISF18_20240630.HDFEOS
+sst:
+  class: File
+  path: ../inputs/oisst.20240629
