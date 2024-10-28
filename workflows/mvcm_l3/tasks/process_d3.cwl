@@ -1,10 +1,10 @@
 # vim: ft=yaml:
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: ["/software/run.py", "--verbose"]
+baseCommand: ["/software/run_l3_aggr.py", "--verbose"]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_g3
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l3
 inputs:
   indir:
     type: Directory
@@ -18,7 +18,7 @@ outputs:
   outfile:
     type: File
     outputBinding:
-      glob: CLDMSK_G3*.nc
+      glob: CLDMSK_D3*.nc
   outdir:
     type: Directory
     outputBinding:

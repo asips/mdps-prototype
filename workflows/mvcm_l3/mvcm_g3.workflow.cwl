@@ -55,7 +55,7 @@ steps:
     out: [stage_in_download_dir]
 
   process:
-    run: tasks/process.cwl
+    run: tasks/process_g3.cwl
     in:
       indir: stage_in/stage_in_download_dir
       collection_id: collection_id
