@@ -29,9 +29,9 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     output_paths = []
     data = json.load(fpath.open())
     if data.get("type", "") == "FeatureCollection":
-        avail_items = ItemCollection.from_dict(data).items
+        avail_items = list(ItemCollection.from_dict(data).items)
     else:
-        avail_items = Catalog.from_dict(data).get_items(recursive=True)
+        avail_items = list(Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True))
     LOG.info("%s catalog items", len(avail_items))  # type: ignore
     for item in avail_items:
         LOG.debug(item)
@@ -47,7 +47,7 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
             if asset.href.startswith("/"):
                 path = Path(asset.href)
             else:
-                path = fpath.parent / Path(asset.href).name
+                path = fpath.parent / Path(asset.href)
             if not path.exists():
                 LOG.warning(
                     "Item %s asset role %s href %s does not exist locally",
@@ -88,7 +88,7 @@ def split_one(fpath: Path, dest: Path, file_duration: int) -> list[Path]:
             continue
         # packets all have CDS timecodes at start of secondary header
         timecode = (
-            ccsds.decode_cds_timecode(bytes(group.packets[0].data[6:15])) / 1000 / 1000
+            ccsds.decode_cds_timecode(bytes(group.packets[0].data[6:15])) / 1000
         )
         bucket = timecode - (timecode % file_duration)
         if bucket not in outputs:
