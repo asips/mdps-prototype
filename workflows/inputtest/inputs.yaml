@@ -1,0 +1,4 @@
+file1: VNP02MOD.A2024001.0006.021.nrt.nc
+stage_in_dir: 
+  class: Directory
+  path: ./inputs
