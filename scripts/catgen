@@ -76,7 +76,7 @@ def generate_catalog(
         raise ValueError("(catgen) Failed to catalog any files")
 
     # catalog.normalize_hrefs(str(basedir.absolute()))
-    # catalog.make_all_asset_hrefs_relative()
+    catalog.make_all_asset_hrefs_relative()
     catalog.save(catalog_type=CatalogType.SELF_CONTAINED)
 
     return catalog
