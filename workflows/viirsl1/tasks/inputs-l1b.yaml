@@ -1,0 +1,5 @@
+input:
+  class: Directory
+  path: ./inputs-l1b
+collection_id: "urn:nasa:unity:asips:int:VJ102"
+download_type: HTTP

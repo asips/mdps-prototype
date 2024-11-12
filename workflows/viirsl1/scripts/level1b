@@ -1,0 +1,162 @@
+#!/usr/bin/env python3.12
+import argparse
+import os
+import json
+import logging
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+from pystac import Catalog, ItemCollection
+
+LOG = logging.getLogger("viirsl1")
+
+
+def run(cmd, **kwds) -> subprocess.CompletedProcess:
+    kwds.setdefault("check", True)
+    cmd = [str(x) for x in cmd]
+    LOG.info("%s", " ".join(cmd))
+    try:
+        return subprocess.run(cmd, **kwds)
+    except subprocess.CalledProcessError as e:
+        LOG.warning(f"viirls1 {e}")
+        return subprocess.CompletedProcess
+
+def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
+    """Gather input file paths from STAC catalog inputs.
+
+    Assumes the asset hrefs are local.
+    """
+    LOG.info("splitting %s", fpath)
+    output_paths = []
+    data = json.load(fpath.open())
+    if data.get("type", "") == "FeatureCollection":
+        avail_items = ItemCollection.from_dict(data).items
+    else:
+        avail_items = Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True)
+    for item in avail_items:
+        LOG.debug(item)
+        for asset in item.assets.values():
+            if not set(asset.roles or []) & set(roles):
+                LOG.debug(
+                        "skipping item %s asset role %s href %s",
+                        item.id,
+                        asset.roles,
+                        asset.href,
+                        )
+                continue
+            if asset.href.startswith("/"):
+                path = Path(asset.href)
+            else:
+                path = fpath.parent / Path(asset.href).name
+            if not path.exists():
+                LOG.warning(
+                        "Item %s asset role %s href %s does not exist locally",
+                        item.id,
+                        asset.roles,
+                        path,
+                        )
+                continue
+            output_paths.append(path)
+    return output_paths
+
+
+def run_l1b(input_paths):
+    parts = input_paths[0].name.split(".")
+    tmp_fn = f"V{parts[1][1:]}{parts[2]}00.L1A_JPSS1.nc"
+    import shutil
+    shutil.copy(input_paths[0], tmp_fn)
+    cmd = (
+            "viirsl1",
+            "noaa20",
+            "l1b",
+            tmp_fn
+            )
+    LOG.info("----------- command ---------------")
+    LOG.info(f"running: {' '.join(cmd)}")
+    run(cmd)
+    fn = sorted(Path("./").glob("V*.nc"))
+    LOG.info(f"{fn=}")
+    assert len(l1a_fn)==1
+    l1a_fn = l1a_fn[0]
+    dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
+    collection = "002"
+    out_fn = f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
+    os.rename(l1a_fn, out_fn)
+    LOG.info(f"L1A created: {out_fn}")
+
+
+def main(
+        collection_id: str,
+        input_: Path,
+        catalog_name: str,
+        file_duration: int,
+        destdir: Path,
+        roles: list[str] | None = None,
+        ):
+    LOG.info("starting viirsl1:level1b")
+    if input_.is_dir():
+        catalog = input_ / catalog_name
+        inputs = gather_catalog_inputs(catalog, roles=roles or [])
+    else:
+        inputs = [input_]
+
+    run_l1b(inputs)
+
+    run(
+        [
+            "catgen",
+            "--verbose",
+            collection_id,
+            f"{destdir}/V*01.A*.nc",
+        ],
+        check=True,
+    )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "-c",
+        "--catalog-name",
+        default="catalog.json",
+        help="Name of catalog/collection file in input dir",
+    )
+    parser.add_argument(
+        "-d",
+        "--file-duration",
+        type=int,
+        default=360,
+        help="File duration in seconds. Files will be aligned to 0z",
+    )
+    parser.add_argument(
+        "input",
+        type=Path,
+        help="Path to a directory containing a STAC feature collection JSON file",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=Path("."),
+        help="directory to save outputs to",
+    )
+    parser.add_argument("collection_id")
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO, format="%(message)s"
+    )
+
+    if not args.input.exists():
+        parser.error(f"input {args.input} does not exist")
+
+    main(
+        args.collection_id,
+        args.input,
+        args.catalog_name,
+        args.file_duration,
+        destdir=args.output,
+        roles=["data"],
+    )

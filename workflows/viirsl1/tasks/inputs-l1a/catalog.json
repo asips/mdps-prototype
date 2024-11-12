@@ -1,0 +1,33 @@
+{
+  "type": "Catalog",
+  "id": "urn:nasa:unity:asips:int:level0_6T",
+  "stac_version": "1.0.0",
+  "description": "STAC Catalog",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./P1590008AAAAAAAAAAAA6T19244000600001.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./P1590000AAAAAAAAAAAA6T19244000600001.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./P1590011AAAAAAAAAAAA6T19244000600001.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./P1590826VIIRSSCIENCE6T19244000600001.json",
+      "type": "application/json"
+    }
+  ]
+}
