@@ -13,7 +13,7 @@ RUN cd /tmp && \
 
 COPY docker/requirements.txt /tmp/
 RUN $APPDIR/bin/python3 -m pip install -r /tmp/requirements.txt
-COPY scripts/*/usr/local/bin/
+COPY scripts/* /usr/local/bin/
 COPY workflows/viirsl1/scripts/* /usr/local/bin/
 
 ENV \
