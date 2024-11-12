@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import re
+from datetime import datetime, timedelta
+from pathlib import Path
+from subprocess import run
+
+from pystac import Catalog, ItemCollection
+
+fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+
+def catalog_asset_paths(fpath: Path, pat: str = ".*") -> list[Path]:
+    if json.load(fpath.open()).get("type", "") == "Catalog":
+        items = Catalog.from_file(fpath).get_items(recursive=True)
+    else:
+        items = ItemCollection.from_file(fpath).items
+    return [
+        Path(asset.get_absolute_href() or "")
+        for item in items
+        for asset in item.assets.values()
+        if re.fullmatch(pat, Path(asset.href).name)
+    ]
+
+
+def timestamp(v: str) -> datetime:
+    return datetime.strptime(v, fmt)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--output")
+parser.add_argument(
+    "gran", type=timestamp, help="target granule timestamp; 6m granules is assumed"
+)
+parser.add_argument(
+    "regex",
+    help="Regex matched against catalog asset file names identifying files to merge",
+)
+parser.add_argument("catalog", type=Path, help="catalog to read inputs from")
+args = parser.parse_args()
+
+from_ = args.gran - timedelta(seconds=10)
+to = args.gran + timedelta(minutes=6, seconds=10)
+files = catalog_asset_paths(args.catalog, args.regex)
+files.sort()
+output = args.output or f"{files[0]}.merged"
+
+run(
+    [
+        "ccsds",
+        "merge",
+        "-A",
+        "jpss-viirs",
+        "--from",
+        from_.strftime(fmt),
+        "--to",
+        to.strftime(fmt),
+        "-o",
+        output,
+        *[str(p) for p in files],
+    ],
+    check=True,
+)
+
+run(["ccsds", "info", output], check=True)
