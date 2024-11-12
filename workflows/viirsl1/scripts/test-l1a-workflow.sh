@@ -13,5 +13,6 @@ time cwltool \
   --outdir=tmp/outputs/ \
   --log-dir=tmp/logs/ \
   --no-warning \
-  workflows/viirsl1/viirsl1.workflow.cwl \
-  workflows/viirsl1/viirsl1.inputs-local.yaml |& tee tmp/log
+  workflows/viirsl1/tasks/l1a-step.cwl  \
+  workflows/viirsl1/tasks/inputs.yaml \
+  |& tee tmp/log
