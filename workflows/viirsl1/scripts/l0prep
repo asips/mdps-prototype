@@ -44,7 +44,7 @@ from_ = args.gran - timedelta(seconds=10)
 to = args.gran + timedelta(minutes=6, seconds=10)
 files = catalog_asset_paths(args.catalog, args.regex)
 files.sort()
-output = args.output or f"{files[0]}.merged"
+output = args.output or f"{files[0].name}.merged"
 
 run(
     [
