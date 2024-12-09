@@ -1,18 +1,26 @@
 {
-  "type": "Catalog",
-  "id": "urn:nasa:unity:asips:int:P1590000-6T",
-  "stac_version": "1.0.0",
-  "description": "STAC Catalog",
-  "links": [
+  "type": "FeatureCollection",
+  "features": [
     {
-      "rel": "root",
-      "href": "./stage-in-results.json",
-      "type": "application/json"
-    },
-    {
-      "rel": "item",
-      "href": "./P1590000AAAAAAAAAAAAAT19244050140701.json",
-      "type": "application/json"
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "P1590000AAAAAAAAAAAAAT19244050140701.PDS",
+      "properties": {
+        "start_datetime": "2019-09-01T00:00:00.042000Z",
+        "end_datetime": "2019-09-01T01:59:59.040000Z",
+        "datetime": "2019-09-01T00:00:00.042000Z"
+      },
+      "geometry": null,
+      "links": [],
+      "assets": {
+        "data2": {
+          "href": "./P1590000AAAAAAAAAAAAAT19244050140701.PDS",
+          "roles": [
+            "data"
+          ]
+        }
+      },
+      "stac_extensions": []
     }
   ]
 }
