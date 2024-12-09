@@ -1,0 +1,5 @@
+input:
+  class: Directory
+  path: ./inputs-apid0
+collection_id: "urn:nasa:unity:asips:int:P1590000-6T"
+download_type: HTTP

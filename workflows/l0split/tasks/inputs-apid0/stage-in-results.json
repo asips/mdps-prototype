@@ -1,0 +1,18 @@
+{
+  "type": "Catalog",
+  "id": "urn:nasa:unity:asips:int:P1590000-6T",
+  "stac_version": "1.0.0",
+  "description": "STAC Catalog",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./stage-in-results.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./P1590000AAAAAAAAAAAAAT19244050140701.json",
+      "type": "application/json"
+    }
+  ]
+}
