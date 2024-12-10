@@ -10,9 +10,9 @@ from pathlib import Path
 
 import fnmeta
 import pystac
-from pystac import Asset, Catalog, CatalogType, Item, Link, RelType
+from pystac import Asset, Catalog, CatalogType, Item, ItemCollection, Link, RelType
 
-LOG = logging.getLogger("caten")
+LOG = logging.getLogger("catgen")
 
 
 def get_times(fpath: Path) -> "tuple[datetime, datetime] | None":
@@ -25,6 +25,51 @@ def get_times(fpath: Path) -> "tuple[datetime, datetime] | None":
     if "begin_time" in meta:
         return meta["begin_time"], meta["begin_time"]
     return None
+
+
+def generate_collection(
+    collection_id: str,
+    pattern: str,
+    basedir: Path,
+) -> ItemCollection:
+    dirpath, pattern = os.path.split(pattern)
+    items: list[Item] = []
+
+    for fpath in Path(dirpath).glob(pattern):
+        LOG.debug("adding datafile %s", fpath)
+        times = get_times(fpath)
+        if not times:
+            LOG.warning("failed to determine file times for %s; skipping", fpath.name)
+            continue
+        start, end = times
+        try:
+            item = Item(
+                id=fpath.name.rsplit(".", 1)[0],
+                geometry=None,
+                bbox=None,
+                properties={},
+                datetime=start,
+                start_datetime=start,
+                end_datetime=end,
+                assets={
+                    fpath.name: Asset(
+                        href=str(fpath.relative_to(basedir)), roles=["data"]
+                    ),
+                },
+                **({"collection": collection_id} if collection_id else {}),  # type: ignore
+            )
+            items.append(item)
+        except pystac.STACError:
+            LOG.exception("failed to create or add item for %s", fpath.name)
+            continue
+
+    if len(items) == 0:
+        raise ValueError("(catgen) Failed to catalog any files")
+
+    collection = ItemCollection(items)
+    (basedir / "catalog.json").write_text(json.dumps(collection.to_dict(), indent=2))
+    # collection.(str(basedir / "catalog.json"))
+    return collection
 
 
 def generate_catalog(
@@ -53,18 +98,15 @@ def generate_catalog(
                 start_datetime=start,
                 end_datetime=end,
                 assets={
-                    "data": Asset(href=str(fpath), roles=["data"]),
+                    fpath.name: Asset(href=str(fpath), roles=["data"]),
                 },
-                # set collection kws only if one was specified as part of pattern
                 **({"collection": collection_id} if collection_id else {}),  # type: ignore
             )
             meta_path = fpath.with_suffix(".json")
             LOG.debug("adding metadata %s", meta_path)
-            item.add_asset("metadata", Asset(href=str(meta_path), roles=["metadata"]))
-            # Slack_2024-09-18: change asset keys from data/metadata to filename
-            for k in ["data", "metadata"]:
-                fn = os.path.basename(item.assets[k].href)
-                item.assets[fn] = item.assets.pop(k)
+            item.add_asset(
+                meta_path.name, Asset(href=str(meta_path), roles=["metadata"])
+            )
             json.dump(item.to_dict(), open(meta_path, "w"))
 
             catalog.add_link(Link(RelType.ITEM, str(meta_path), "application/json"))
@@ -85,6 +127,13 @@ def generate_catalog(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "-t",
+        "--type",
+        choices=["catalog", "collection"],
+        default="collection",
+        help="Write either a Catalog or FeatureCollection",
+    )
     parser.add_argument("collection_id")
     parser.add_argument(
         "file_pattern", help="Glob style file pattern to include in catalog"
@@ -94,7 +143,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(name)s -- %(message)s")
     LOG.setLevel(logging.DEBUG if args.verbose else logging.INFO)
 
-    catalog = generate_catalog(
+    catalog = globals()[f"generate_{args.type}"](
         args.collection_id,
         args.file_pattern,
         basedir=Path("."),
