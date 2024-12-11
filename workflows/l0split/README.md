@@ -22,7 +22,7 @@ export TMPDIR=tmp/workdir
 cwltool \
     --outdir=./tmp/outputs \
     --log-dir=./tmp/logs \
-    ./workflows/l0split/l0split.workflow.cwl \
+    /workflows/l0split/tasks/process.cwl \
     ./workflows/l0split/inputs-apid.yaml
 ```
 
