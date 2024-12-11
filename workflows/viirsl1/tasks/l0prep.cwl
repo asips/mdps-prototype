@@ -5,10 +5,10 @@ baseCommand: [l0prep]
 arguments:
   - "$(inputs.granule)"
   - "$(inputs.regex)"
-  - "$(inputs.inputdir.path)/catalog.json"
+  - "$(inputs.inputdir.path)/stage-in-results.json"
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest 
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest
 inputs:
   granule:
     type: string
@@ -17,7 +17,7 @@ inputs:
     type: string
     label: "Regex to identify products from catalog to merge (re.fullmatch)"
   inputdir:
-    type: Directory 
+    type: Directory
 outputs:
   merged:
     type: File

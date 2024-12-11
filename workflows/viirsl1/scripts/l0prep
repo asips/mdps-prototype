@@ -17,7 +17,7 @@ def catalog_asset_paths(fpath: Path, pat: str = ".*") -> list[Path]:
     else:
         items = ItemCollection.from_file(fpath).items
     return [
-        Path(asset.get_absolute_href() or "")
+        fpath.parent / asset.href
         for item in items
         for asset in item.assets.values()
         if re.fullmatch(pat, Path(asset.href).name)
