@@ -4,7 +4,7 @@ class: CommandLineTool
 baseCommand: ["level0split", "--verbose"]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/l0split:0143a15
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/l0split:1629e7e
 inputs:
   input:
     type: Directory

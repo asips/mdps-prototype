@@ -1,21 +1,29 @@
 # Level-0 File Splitting
 
-## Execute locally (i.e., not in docker)
-This assumes the `ccsds` command line tool is on `PATH`. It can be downloaded from 
-here: https://github.com/bmflynn/ccsds-rs/commits/0.1.0-beta.11
+## Execute locally w/ docker/cwltool
 
-Make sure the necessary scripts are on the path
+Designed to be run from mdsp-prototype directory
 ```
-export PATH=$PWD/workflows/scripts
+bash docker/build.sh
+```
+
+If you don't already have the test L0 file you need to download it:
+```
+curl https://sipsdev.ssec.wisc.edu/~steved/P1590000AAAAAAAAAAAAAT19244050140701.PDS \
+    -o l0split/inputs-apidl0/P1590000AAAAAAAAAAAAAT19244050140701.PDS
 ```
 
 Run the workflow
 ```
+rm -fr tmp/
+mkdir -p tmp/workdir
+export TMPDIR=tmp/workdir
+
 cwltool \
-    --outdir=./outputs \
-    --log-dir=./logs \
-    ./worlflows/l0split/l0split.workflow.cwl \
-    ./worlflows/l0split/l0split.inputs.yaml \
+    --outdir=./tmp/outputs \
+    --log-dir=./tmp/logs \
+    ./workflows/l0split/tasks/process.cwl \
+    ./workflows/l0split/inputs-apid.yaml
 ```
 
 

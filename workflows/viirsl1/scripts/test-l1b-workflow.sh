@@ -12,7 +12,7 @@ export TMPDIR=tmp/workdir
 time cwltool \
   --outdir=tmp/outputs/ \
   --log-dir=tmp/logs/ \
-  --no-warning \
-  workflows/viirsl1/tasks/l1a-step.cwl  \
-  workflows/viirsl1/tasks/inputs.yaml \
+  --debug \
+  workflows/viirsl1/tasks/l1b-step.cwl \
+  workflows/viirsl1/tasks/inputs-l1b.yaml \
   |& tee tmp/log

@@ -1,4 +1,0 @@
-stac_json:
-  class: File
-  path: catalog.json
-collection_id: "urn:nasa:unity:asips:int:P1590008-6T___1"

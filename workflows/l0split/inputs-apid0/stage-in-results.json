@@ -4,7 +4,7 @@
     {
       "type": "Feature",
       "stac_version": "1.0.0",
-      "id": "P1590008AAAAAAAAAAAAAT19244050215301.PDS",
+      "id": "P1590000AAAAAAAAAAAAAT19244050140701.PDS",
       "properties": {
         "start_datetime": "2019-09-01T00:00:00.042000Z",
         "end_datetime": "2019-09-01T01:59:59.040000Z",
@@ -14,7 +14,7 @@
       "links": [],
       "assets": {
         "data2": {
-          "href": "s3://asips-int-unity-data/urn:nasa:unity:asips:int:P1590008-T___1/P1590008AAAAAAAAAAAAAT19244050215301.PDS",
+          "href": "./P1590000AAAAAAAAAAAAAT19244050140701.PDS",
           "roles": [
             "data"
           ]

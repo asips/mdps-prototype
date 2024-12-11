@@ -34,17 +34,16 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
         avail_items = ItemCollection.from_dict(data).items
     else:
         avail_items = Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True)
-    #LOG.info("%s catalog items", len(avail_items))  # type: ignore
     for item in avail_items:
         LOG.debug(item)
         for asset in item.assets.values():
             if not set(asset.roles or []) & set(roles):
                 LOG.debug(
-                    "skipping item %s asset role %s href %s",
-                    item.id,
-                    asset.roles,
-                    asset.href,
-                )
+                        "skipping item %s asset role %s href %s",
+                        item.id,
+                        asset.roles,
+                        asset.href,
+                        )
                 continue
             if asset.href.startswith("/"):
                 path = Path(asset.href)
@@ -52,41 +51,34 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
                 path = fpath.parent / Path(asset.href).name
             if not path.exists():
                 LOG.warning(
-                    "Item %s asset role %s href %s does not exist locally",
-                    item.id,
-                    asset.roles,
-                    path,
-                )
+                        "Item %s asset role %s href %s does not exist locally",
+                        item.id,
+                        asset.roles,
+                        path,
+                        )
                 continue
             output_paths.append(path)
     return output_paths
 
 
-def run_l1a(input_paths):
-    for p in input_paths:
-        if p.name.find("0008AAAAAAAAAAAA6T")>=0:
-            adcs = p
-        if p.name.find("0011AAAAAAAAAAAA6T")>=0:
-            diary = p
-        if p.name.find("0000AAAAAAAAAAAA6T")>=0:
-            bus = p
-        if p.name.find("0826VIIRSSCIENCE6T")>=0:
-            sci = p
+def run_l1b(input_paths):
+    parts = input_paths[0].name.split(".")
+    tmp_fn = f"V{parts[1][1:]}{parts[2]}00.L1A_JPSS1.nc"
+    import shutil
+    shutil.copy(input_paths[0], tmp_fn)
     cmd = (
             "viirsl1",
             "noaa20",
-            "l1a",
-            str(sci),
-            str(diary),
-            str(adcs),
-            str(bus)
-    )
+            "l1b",
+            tmp_fn
+            )
+    LOG.info("----------- command ---------------")
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
-    l1a_fn = sorted(Path("./").glob("V*L1A*.nc"))
+    fn = sorted(Path("./").glob("V*.nc"))
+    LOG.info(f"{fn=}")
     assert len(l1a_fn)==1
     l1a_fn = l1a_fn[0]
-    LOG.info(f"{l1a_fn=}")
     dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
     collection = "002"
     out_fn = f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
@@ -95,21 +87,21 @@ def run_l1a(input_paths):
 
 
 def main(
-    collection_id: str,
-    input_: Path,
-    catalog_name: str,
-    file_duration: int,
-    destdir: Path,
-    roles: list[str] | None = None,
-):
-    LOG.info("starting viirsl1")
+        collection_id: str,
+        input_: Path,
+        catalog_name: str,
+        file_duration: int,
+        destdir: Path,
+        roles: list[str] | None = None,
+        ):
+    LOG.info("starting viirsl1:level1b")
     if input_.is_dir():
         catalog = input_ / catalog_name
         inputs = gather_catalog_inputs(catalog, roles=roles or [])
     else:
         inputs = [input_]
 
-    run_l1a(inputs)
+    run_l1b(inputs)
 
     run(
         [
@@ -129,7 +121,6 @@ if __name__ == "__main__":
         "-c",
         "--catalog-name",
         default="catalog.json",
-        #default="stage-in-results.json",
         help="Name of catalog/collection file in input dir",
     )
     parser.add_argument(

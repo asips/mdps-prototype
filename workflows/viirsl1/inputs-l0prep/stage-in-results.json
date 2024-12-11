@@ -1,0 +1,71 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "P1590000AAAAAAAAAAAA6T19244000000001",
+      "properties": {
+        "start_datetime": "2019-09-01T00:00:00Z",
+        "end_datetime": "2019-09-01T00:00:00Z",
+        "datetime": "2019-09-01T00:00:00Z"
+      },
+      "geometry": null,
+      "links": [],
+      "assets": {
+        "P1590000AAAAAAAAAAAA6T19244000000001.PDS": {
+          "href": "P1590000AAAAAAAAAAAA6T19244000000001.PDS",
+          "roles": [
+            "data"
+          ]
+        }
+      },
+      "stac_extensions": [],
+      "collection": "foo"
+    },
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "P1590000AAAAAAAAAAAA6T19244000600001",
+      "properties": {
+        "start_datetime": "2019-09-01T00:06:00Z",
+        "end_datetime": "2019-09-01T00:06:00Z",
+        "datetime": "2019-09-01T00:06:00Z"
+      },
+      "geometry": null,
+      "links": [],
+      "assets": {
+        "P1590000AAAAAAAAAAAA6T19244000600001.PDS": {
+          "href": "P1590000AAAAAAAAAAAA6T19244000600001.PDS",
+          "roles": [
+            "data"
+          ]
+        }
+      },
+      "stac_extensions": [],
+      "collection": "foo"
+    },
+    {
+      "type": "Feature",
+      "stac_version": "1.0.0",
+      "id": "P1590000AAAAAAAAAAAA6T19244001200001",
+      "properties": {
+        "start_datetime": "2019-09-01T00:12:00Z",
+        "end_datetime": "2019-09-01T00:12:00Z",
+        "datetime": "2019-09-01T00:12:00Z"
+      },
+      "geometry": null,
+      "links": [],
+      "assets": {
+        "P1590000AAAAAAAAAAAA6T19244001200001.PDS": {
+          "href": "P1590000AAAAAAAAAAAA6T19244001200001.PDS",
+          "roles": [
+            "data"
+          ]
+        }
+      },
+      "stac_extensions": [],
+      "collection": "foo"
+    }
+  ]
+}
