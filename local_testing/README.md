@@ -32,6 +32,48 @@ use the previous stages outputs
 - The goal with this local testing directory was to make getting inputs for the
   current task easier. I feel like that helps debugging our individiual docker
   containers and scripts.
+- The other goal was to keep all of test testing junk out of the workflow
+  directories such that those are easier to understand.  For isntance
+
+```
+$ cd ~/code/mdps-prototype/workflows/
+$ tree l0split/
+l0split/
+├── docker
+│   └── Dockerfile
+├── l0split.workflow.cwl
+└── tasks
+    └── process.cwl
+```
+
+That is the simplest workflow as it just has 3 files need and technically the
+workflow.cwl is only needed in MDPS.  For local testing we run just the
+process.cwl
+
+Here is a slightly more complicated workflow as there are 3 parts:
+- l0prep (i.e. merge)
+- l1a
+- l1b
+
+$ tree viirsl1
+viirsl1
+├── docker
+│   ├── build.sh
+│   ├── Dockerfile
+│   └── requirements.txt
+├── scripts
+│   ├── l0prep
+│   ├── level1a
+│   └── level1b
+├── tasks
+│   ├── l0prep.cwl
+│   ├── l1a-step.cwl
+│   ├── l1b-step.cwl
+│   ├── process.cwl
+│   └── stage_in.cwl
+├── l0prep.workflow.cwl
+└── viirsl1.workflow.cwl
+```
 
 
 ## Results
