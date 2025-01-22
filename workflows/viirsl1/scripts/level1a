@@ -34,7 +34,6 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
         avail_items = ItemCollection.from_dict(data).items
     else:
         avail_items = Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True)
-    #LOG.info("%s catalog items", len(avail_items))  # type: ignore
     for item in avail_items:
         LOG.debug(item)
         for asset in item.assets.values():
@@ -84,8 +83,10 @@ def run_l1a(input_paths):
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
     l1a_fn = sorted(Path("./").glob("V*L1A*.nc"))
-    assert len(l1a_fn)==1
-    l1a_fn = l1a_fn[0]
+    assert len(l1a_fn)==3
+    os.remove(l1a_fn[0])
+    os.remove(l1a_fn[2])
+    l1a_fn = l1a_fn[1]
     LOG.info(f"{l1a_fn=}")
     dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
     collection = "002"
