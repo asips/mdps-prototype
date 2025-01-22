@@ -55,6 +55,7 @@ Here is a slightly more complicated workflow as there are 3 parts:
 - l1a
 - l1b
 
+```
 $ tree viirsl1
 viirsl1
 ├── docker
