@@ -60,5 +60,16 @@ EOF
         ./workflows/l0split/tasks/process.cwl \
         ./local_testing/l0split-inputs/$collection_id.yaml
 
+    # get rid of input L0 since we don't need that anymore
+    rm $protodir/local_testing/l0split-inputs/$collection_id/$level0_fn
+
 done
+
+
+rm -f ./local_testing/l0split-outputs/*/P159*T192440018*
+rm -f ./local_testing/l0split-outputs/*/P159*T19244002*
+rm -f ./local_testing/l0split-outputs/*/P159*T19244003*
+rm -f ./local_testing/l0split-outputs/*/P159*T19244004*
+rm -f ./local_testing/l0split-outputs/*/P159*T19244005*
+rm -f ./local_testing/l0split-outputs/*/P159*T1924401*
 
