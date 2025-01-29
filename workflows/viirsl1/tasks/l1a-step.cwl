@@ -9,7 +9,7 @@ baseCommand: [level1a]
 successCodes: [0, 101]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/viirs_l1-build/viirsl1:latest
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest
 inputs:
   input:
     type: Directory
@@ -25,6 +25,12 @@ inputs:
     default: 6
     inputBinding:
       prefix: -d
+  catalogname:
+    type: string
+    label: catalog name
+    default: catalog.json
+    inputBinding:
+      prefix: -c
 outputs:
   outdir:
     type: Directory
