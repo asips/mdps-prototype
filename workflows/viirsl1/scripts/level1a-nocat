@@ -130,11 +130,11 @@ if __name__ == "__main__":
         default=Path("."),
         help="directory to save outputs to",
     )
-    parser.add_argument(
-        "input",
-        type=Path,
-        help="Path to a directory containing a STAC feature collection JSON file",
-    )
+    #parser.add_argument(
+    #    "input",
+    #    type=Path,
+    #    help="Path to a directory containing a STAC feature collection JSON file",
+    #)
     parser.add_argument("collection_id")
     parser.add_argument("apid826")
     parser.add_argument("apid11")
@@ -149,10 +149,14 @@ if __name__ == "__main__":
 
     main(
         args.collection_id,
-        Path(args.input) / args.apid826,
-        Path(args.input) / args.apid11,
-        Path(args.input) / args.apid8,
-        Path(args.input) / args.apid0,
+        #Path(args.input) / args.apid826,
+        #Path(args.input) / args.apid11,
+        #Path(args.input) / args.apid8,
+        #Path(args.input) / args.apid0,
+        args.apid826,
+        args.apid11,
+        args.apid8,
+        args.apid0,
         file_duration=args.file_duration,
         destdir=args.output,
         roles=["data"],
