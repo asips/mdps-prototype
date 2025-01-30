@@ -35,7 +35,7 @@ outputs:
 
 steps:
   stage_in:
-    run: "http://awslbdockstorestack-lb-1429770210.us-west-2.elb.amazonaws.com:9998/api/ga4gh/trs/v2/tools/%23workflow%2Fdockstore.org%2Fmike-gangl%2Funity-example-application/versions/8/PLAIN-CWL/descriptor/%2Fstage_in.cwl"
+    run: "http://awslbdockstorestack-lb-1429770210.us-west-2.elb.amazonaws.com:9998/api/ga4gh/trs/v2/tools/%23workflow%2Fdockstore.org%2Fmike-gangl%2Funity-OGC-example-application/versions/1/PLAIN-CWL/descriptor/%2Fstage_in.cwl"
     in:
       download_type: download_type
       stac_json: stac_json
@@ -86,7 +86,7 @@ steps:
     out: [outdir, l1a]
 
   stage_out:
-    run: "http://awslbdockstorestack-lb-1429770210.us-west-2.elb.amazonaws.com:9998/api/ga4gh/trs/v2/tools/%23workflow%2Fdockstore.org%2Fmike-gangl%2Funity-example-application/versions/8/PLAIN-CWL/descriptor/%2Fstage_out.cwl"
+    run: "http://awslbdockstorestack-lb-1429770210.us-west-2.elb.amazonaws.com:9998/api/ga4gh/trs/v2/tools/%23workflow%2Fdockstore.org%2Fmike-gangl%2Funity-OGC-example-application/versions/1/PLAIN-CWL/descriptor/%2Fstage_in.cwl"
     in:
       output_dir: l1a/outdir
       result_path_prefix:
