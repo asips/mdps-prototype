@@ -75,15 +75,10 @@ def run_l1b(input_paths):
     LOG.info("----------- command ---------------")
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
-    fn = sorted(Path("./").glob("V*.nc"))
-    LOG.info(f"{fn=}")
-    assert len(l1a_fn)==1
-    l1a_fn = l1a_fn[0]
-    dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
-    collection = "002"
-    out_fn = f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
-    os.rename(l1a_fn, out_fn)
-    LOG.info(f"L1A created: {out_fn}")
+    fns = sorted(Path("./").glob("VJ102*.A*.nc"))
+    LOG.info(f"{fns=}")
+    assert len(fns)==4
+    LOG.info(f"L1B created: {fns}")
 
 
 def main(
@@ -108,7 +103,7 @@ def main(
             "catgen",
             "--verbose",
             collection_id,
-            f"{destdir}/V*01.A*.nc",
+            f"{destdir}/VJ102*.nc",
         ],
         check=True,
     )

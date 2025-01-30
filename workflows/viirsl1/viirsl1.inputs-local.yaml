@@ -1,5 +1,0 @@
-stac_json:
-  class: File
-  path: catalog-local.json
-collection_id: "urn:nasa:unity:asips:int:VJ101"
-download_type: HTTP

@@ -1,15 +1,12 @@
 # vim: ft=yaml:
 cwlVersion: v1.2
 class: CommandLineTool
-id: viirsl1-l1a
-baseCommand: [level1a]
-#arguments: ["noaa20", "l1a"]
-# FIXME: Necessary to map 101 to success because incomplete scans cause it to exit 101 because
-#        we have not provided inputs with full context.
-successCodes: [0, 101]
+id: viirsl1-l1b
+baseCommand: [level1b]
 requirements:
   DockerRequirement:
     dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest
+
 inputs:
   input:
     type: Directory
@@ -25,18 +22,25 @@ inputs:
     default: 6
     inputBinding:
       prefix: -d
-  catalogname:
-    type: string
-    label: catalog name
-    default: catalog.json
-    inputBinding:
-      prefix: -c
+
 outputs:
   outdir:
     type: Directory
     outputBinding:
       glob: .
-  l1a:
+#  cdg:
+#    type: File
+#    outputBinding:
+#      glob: "V??02CDG.A*.nc"
+  mod:
     type: File
     outputBinding:
-      glob: "V*01.A*.nc"
+      glob: "V??02MOD.A*.nc"
+  dnb:
+    type: File
+    outputBinding:
+      glob: "V??02DNB.A*.nc"
+  img:
+    type: File
+    outputBinding:
+      glob: "V??02IMG.A*.nc"

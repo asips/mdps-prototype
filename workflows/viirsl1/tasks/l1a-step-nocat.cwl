@@ -2,7 +2,7 @@
 cwlVersion: v1.2
 class: CommandLineTool
 id: viirsl1-l1a
-baseCommand: [level1a]
+baseCommand: [level1a-nocat]
 #arguments: ["noaa20", "l1a"]
 # FIXME: Necessary to map 101 to success because incomplete scans cause it to exit 101 because
 #        we have not provided inputs with full context.
@@ -19,18 +19,28 @@ inputs:
     type: string
     inputBinding:
       position: 1
+  apid826:
+    type: File
+    inputBinding:
+      position: 2
+  apid11:
+    type: File
+    inputBinding:
+      position: 3
+  apid8:
+    type: File
+    inputBinding:
+      position: 4
+  apid0:
+    type: File
+    inputBinding:
+      position: 5
   granlen:
     type: int
     label: granule length in minuts
     default: 6
     inputBinding:
       prefix: -d
-  catalogname:
-    type: string
-    label: catalog name
-    default: catalog.json
-    inputBinding:
-      prefix: -c
 outputs:
   outdir:
     type: Directory
