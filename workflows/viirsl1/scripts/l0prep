@@ -43,6 +43,8 @@ args = parser.parse_args()
 from_ = args.gran - timedelta(seconds=10)
 to = args.gran + timedelta(minutes=6, seconds=10)
 files = catalog_asset_paths(args.catalog, args.regex)
+if not files:
+    parser.error(f"No files found for pattern {args.regex} in {args.catalog}\n")
 files.sort()
 output = args.output or f"{files[0].name}.merged"
 
