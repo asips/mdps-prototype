@@ -8,7 +8,7 @@ arguments:
   - "$(inputs.inputdir.path)/stage-in-results.json"
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250131
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250131-2
 inputs:
   granule:
     type: string
