@@ -11,26 +11,30 @@ requirements:
   DockerRequirement:
     dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250130
 inputs:
-  collection_id:
+  granule:
     type: string
     inputBinding:
       position: 0
+  collection_id:
+    type: string
+    inputBinding:
+      position: 1
   apid826:
     type: File
     inputBinding:
-      position: 1
+      position: 2
   apid11:
     type: File
     inputBinding:
-      position: 2
+      position: 3
   apid8:
     type: File
     inputBinding:
-      position: 3
+      position: 4
   apid0:
     type: File
     inputBinding:
-      position: 4
+      position: 5
   granlen:
     type: int
     label: granule length in minuts

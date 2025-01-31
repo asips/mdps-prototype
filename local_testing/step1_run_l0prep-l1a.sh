@@ -16,8 +16,8 @@ collection_id=P159-merged
 protodir=$HOME/code/mdps-prototype
 
 # Make a directory to stage our inputs
-mkdir -p $protodir/local_testing/l0prep-inputs/$collection_id/
-cd $protodir/local_testing/l0prep-inputs/$collection_id/
+mkdir -p $protodir/local_testing/l0prep-l1a-inputs/$collection_id/
+cd $protodir/local_testing/l0prep-l1a-inputs/$collection_id/
 
 # grab our input data from upstream test of l0split, need the 00:00, 00:06, 00:12
 rsync -auv $protodir/local_testing/l0split-outputs/*/P159*T192440000*.PDS .
@@ -44,5 +44,5 @@ cd $protodir
 # Run cwltool
 cwltool \
     --outdir=./local_testing/l0prep-l1a-outputs/ \
-    $protodir/workflows/viirsl1/l0prep-l1a.workflow.cwl \
-    $protodir/local_testing/l0prep-inputs/$collection_id.yaml
+    $protodir/workflows/viirsl1/l0prep-l1a.combinedtask.cwl \
+    $protodir/local_testing/l0prep-l1a-inputs/$collection_id.yaml

@@ -61,8 +61,7 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     return output_paths
 
 
-def run_l1a(apid826, apid0, apid8, apid11):
-    run(("ls", "-l"))
+def run_l1a(granule, apid826, apid0, apid8, apid11):
     cmd = (
             "viirsl1",
             "noaa20",
@@ -74,21 +73,18 @@ def run_l1a(apid826, apid0, apid8, apid11):
     )
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
-    l1a_fn = sorted(Path("./").glob("V*L1A*.nc"))
-    print(l1a_fn)
-    assert len(l1a_fn)==3
-    os.remove(l1a_fn[0])
-    os.remove(l1a_fn[2])
-    l1a_fn = l1a_fn[1]
+    l1a_fn = list(Path("./").glob(f"V{granule:%Y%j%H%M}*L1A*.nc"))
+    assert len(l1a_fn)==1
+    l1a_fn = l1a_fn[0]
     LOG.info(f"{l1a_fn=}")
-    dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
     collection = "002"
-    out_fn = f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
+    out_fn = f"VJ101.A{granule:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
     os.rename(l1a_fn, out_fn)
     LOG.info(f"L1A created: {out_fn}")
 
 
 def main(
+    granule: datetime,
     collection_id: str,
     apid826: Path,
     apid11: Path,
@@ -100,17 +96,19 @@ def main(
 ):
     LOG.info("starting viirsl1")
 
-    run_l1a(apid826, apid0, apid8, apid11)
+    run_l1a(granule, apid826, apid0, apid8, apid11)
 
     run(
         [
             "catgen",
             "--verbose",
+            "-t", "catalog",
             collection_id,
             f"{destdir}/V*01.A*.nc",
         ],
         check=True,
     )
+    run(['ls', '-l'])
 
 
 if __name__ == "__main__":
@@ -130,11 +128,7 @@ if __name__ == "__main__":
         default=Path("."),
         help="directory to save outputs to",
     )
-    #parser.add_argument(
-    #    "input",
-    #    type=Path,
-    #    help="Path to a directory containing a STAC feature collection JSON file",
-    #)
+    parser.add_argument("granule")
     parser.add_argument("collection_id")
     parser.add_argument("apid826")
     parser.add_argument("apid11")
@@ -147,12 +141,10 @@ if __name__ == "__main__":
         level=logging.DEBUG if args.verbose else logging.INFO, format="%(message)s"
     )
 
+    granule = datetime.strptime(args.granule, "%Y-%m-%dT%H:%M:%SZ")
     main(
+        granule,
         args.collection_id,
-        #Path(args.input) / args.apid826,
-        #Path(args.input) / args.apid11,
-        #Path(args.input) / args.apid8,
-        #Path(args.input) / args.apid0,
         args.apid826,
         args.apid11,
         args.apid8,

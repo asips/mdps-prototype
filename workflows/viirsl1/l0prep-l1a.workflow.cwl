@@ -78,6 +78,7 @@ steps:
   l1a:
     run: tasks/l1a-step-nocat.cwl
     in:
+      granule: granule
       collection_id: collection_id
       apid826: sci/merged
       apid11: apid11/merged
