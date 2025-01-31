@@ -8,9 +8,6 @@ requirements:
     networkAccess: true
   StepInputExpressionRequirement: {}
   InlineJavascriptRequirement: {}
-  EnvVarRequirement:
-    envDef:
-      CCSDS_LOG: debug
 
 inputs:
   stac_json:
@@ -94,6 +91,5 @@ steps:
         valueFrom: "stage_out"
       staging_bucket:
         valueFrom: "asips-int-unity-data"
-      collection_id: collection_id
     out: [failed_features, stage_out_results, successful_features]
 

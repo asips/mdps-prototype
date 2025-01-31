@@ -102,14 +102,20 @@ def main(
         [
             "catgen",
             "--verbose",
-            "-t", "catalog",
+            "-t", "collection",
             collection_id,
             f"{destdir}/V*01.A*.nc",
         ],
         check=True,
     )
-    run(['ls', '-l'])
 
+    dirP = Path("./")
+    LOG.info(f"viirsl1 pwd: {dirP.absolute()}")
+    for fnP in dirP.glob("*"):
+        if fnP.name.endswith(".json"):
+            LOG.info(f"{fnP} contents: {open(fnP).read()}")
+        else:
+            LOG.info(f"  {fnP}  (size={fnP.stat().st_size})")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
