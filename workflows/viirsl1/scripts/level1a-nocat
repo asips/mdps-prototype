@@ -104,7 +104,7 @@ def main(
             "catgen",
             "--verbose",
             "-t",
-            "collection",
+            "catalog",
             collection_id,
             f"{destdir}/V*01.A*.nc",
         ],

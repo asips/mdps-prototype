@@ -10,7 +10,7 @@ rm -fr tmp
 mkdir -p tmp
 export TMPDIR=tmp/
 
-collection_id=VJ101
+collection_id=urn:nasa:unity:asips:int:VJ101___1
 
 # This is the directory where mdps-prototype is checked out to
 protodir=$HOME/code/mdps-prototype
