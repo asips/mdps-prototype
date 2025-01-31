@@ -4,7 +4,7 @@ import os
 import json
 import logging
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from pystac import Catalog, ItemCollection
@@ -21,6 +21,7 @@ def run(cmd, **kwds) -> subprocess.CompletedProcess:
     except subprocess.CalledProcessError as e:
         LOG.warning(f"viirls1 {e}")
         return subprocess.CompletedProcess
+
 
 def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     """Gather input file paths from STAC catalog inputs.
@@ -63,18 +64,18 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
 
 def run_l1a(granule, apid826, apid0, apid8, apid11):
     cmd = (
-            "viirsl1",
-            "noaa20",
-            "l1a",
-            str(apid826),
-            str(apid11),
-            str(apid8),
-            str(apid0)
+        "viirsl1",
+        "noaa20",
+        "l1a",
+        str(apid826),
+        str(apid11),
+        str(apid8),
+        str(apid0),
     )
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
     l1a_fn = list(Path("./").glob(f"V{granule:%Y%j%H%M}*L1A*.nc"))
-    assert len(l1a_fn)==1
+    assert len(l1a_fn) == 1
     l1a_fn = l1a_fn[0]
     LOG.info(f"{l1a_fn=}")
     collection = "002"
@@ -102,7 +103,8 @@ def main(
         [
             "catgen",
             "--verbose",
-            "-t", "collection",
+            "-t",
+            "collection",
             collection_id,
             f"{destdir}/V*01.A*.nc",
         ],

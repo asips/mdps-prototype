@@ -1,0 +1,13 @@
+#!/bin/bash
+failed=0
+for fpath in $@; do
+  cmd="cwltool --validate $fpath"
+  echo
+  echo $cmd
+  eval $cmd
+  if [[ $failed == 0 ]]; then
+    failed=$?
+  fi
+done
+
+exit $failed

@@ -1,8 +1,9 @@
+---
 output_type: hdf
 band_type: m
-l1b: 
-  class: File
-  path: ../../outputs/VJ102MOD.A2024183.0006.021.2024204170420.nc
+l1b:
+    class: File
+    path: ../../outputs/VJ102MOD.A2024183.0006.021.2024204170420.nc
 geo:
-  class: File
-  path: ../../outputs/VJ103MOD.A2024183.0006.021.2024204170504.nc
+    class: File
+    path: ../../outputs/VJ103MOD.A2024183.0006.021.2024204170504.nc

@@ -3,6 +3,7 @@
 
 Asset paths will be relative to the catalog which will be written to CWD.
 """
+
 import argparse
 import json
 import logging
@@ -54,8 +55,8 @@ def generate_collection(
                 datetime=start,
                 start_datetime=start,
                 end_datetime=end,
-                # The href will alway automatically be update to be absolute which will 
-                # likely break consumers of this collection, so don't set it. Let consumers 
+                # The href will alway automatically be update to be absolute which will
+                # likely break consumers of this collection, so don't set it. Let consumers
                 # assume the asset paths are relateive to basedir.
                 # href=str(basedir),
                 assets={

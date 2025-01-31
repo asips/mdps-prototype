@@ -4,7 +4,7 @@ import os
 import json
 import logging
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from pystac import Catalog, ItemCollection
@@ -21,6 +21,7 @@ def run(cmd, **kwds) -> subprocess.CompletedProcess:
     except subprocess.CalledProcessError as e:
         LOG.warning(f"viirls1 {e}")
         return subprocess.CompletedProcess
+
 
 def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     """Gather input file paths from STAC catalog inputs.
@@ -63,34 +64,28 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
 
 def run_l1a(input_paths):
     for p in input_paths:
-        if p.name.find("0008AAAAAAAAAAAA6T")>=0:
+        if p.name.find("0008AAAAAAAAAAAA6T") >= 0:
             adcs = p
-        if p.name.find("0011AAAAAAAAAAAA6T")>=0:
+        if p.name.find("0011AAAAAAAAAAAA6T") >= 0:
             diary = p
-        if p.name.find("0000AAAAAAAAAAAA6T")>=0:
+        if p.name.find("0000AAAAAAAAAAAA6T") >= 0:
             bus = p
-        if p.name.find("0826VIIRSSCIENCE6T")>=0:
+        if p.name.find("0826VIIRSSCIENCE6T") >= 0:
             sci = p
-    cmd = (
-            "viirsl1",
-            "noaa20",
-            "l1a",
-            str(sci),
-            str(diary),
-            str(adcs),
-            str(bus)
-    )
+    cmd = ("viirsl1", "noaa20", "l1a", str(sci), str(diary), str(adcs), str(bus))
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
     l1a_fn = sorted(Path("./").glob("V*L1A*.nc"))
-    assert len(l1a_fn)==3
+    assert len(l1a_fn) == 3
     os.remove(l1a_fn[0])
     os.remove(l1a_fn[2])
     l1a_fn = l1a_fn[1]
     LOG.info(f"{l1a_fn=}")
     dt = datetime.strptime(l1a_fn.name.split(".")[0], "V%Y%j%H%M%S")
     collection = "002"
-    out_fn = f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
+    out_fn = (
+        f"VJ101.A{dt:%Y%j.%H%M}.{collection}.{datetime.now().strftime('%Y%j%H%M%S')}.nc"
+    )
     os.rename(l1a_fn, out_fn)
     LOG.info(f"L1A created: {out_fn}")
 
@@ -130,7 +125,7 @@ if __name__ == "__main__":
         "-c",
         "--catalog-name",
         default="catalog.json",
-        #default="stage-in-results.json",
+        # default="stage-in-results.json",
         help="Name of catalog/collection file in input dir",
     )
     parser.add_argument(

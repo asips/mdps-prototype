@@ -2,7 +2,7 @@
 import json
 import logging
 import subprocess
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -55,7 +55,7 @@ def pipeline(inputs: Inputs) -> Path:
     input_name = inputs.inputs[0].name
     meta = fnmeta.identify(inputs.inputs[0].name)
     if not meta:
-        raise ValueError(f"Failed to identify input file")
+        raise ValueError("Failed to identify input file")
     granule = meta["begin_time"]
     created = datetime.utcnow()
     if "G3" in input_name:

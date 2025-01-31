@@ -1,10 +1,8 @@
 #!/usr/bin/env python3.12
 import argparse
-import os
 import json
 import logging
 import subprocess
-from datetime import datetime, timezone
 from pathlib import Path
 
 from pystac import Catalog, ItemCollection
@@ -21,6 +19,7 @@ def run(cmd, **kwds) -> subprocess.CompletedProcess:
     except subprocess.CalledProcessError as e:
         LOG.warning(f"viirls1 {e}")
         return subprocess.CompletedProcess
+
 
 def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     """Gather input file paths from STAC catalog inputs.
@@ -39,11 +38,11 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
         for asset in item.assets.values():
             if not set(asset.roles or []) & set(roles):
                 LOG.debug(
-                        "skipping item %s asset role %s href %s",
-                        item.id,
-                        asset.roles,
-                        asset.href,
-                        )
+                    "skipping item %s asset role %s href %s",
+                    item.id,
+                    asset.roles,
+                    asset.href,
+                )
                 continue
             if asset.href.startswith("/"):
                 path = Path(asset.href)
@@ -51,11 +50,11 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
                 path = fpath.parent / Path(asset.href).name
             if not path.exists():
                 LOG.warning(
-                        "Item %s asset role %s href %s does not exist locally",
-                        item.id,
-                        asset.roles,
-                        path,
-                        )
+                    "Item %s asset role %s href %s does not exist locally",
+                    item.id,
+                    asset.roles,
+                    path,
+                )
                 continue
             output_paths.append(path)
     return output_paths
@@ -65,30 +64,26 @@ def run_l1b(input_paths):
     parts = input_paths[0].name.split(".")
     tmp_fn = f"V{parts[1][1:]}{parts[2]}00.L1A_JPSS1.nc"
     import shutil
+
     shutil.copy(input_paths[0], tmp_fn)
-    cmd = (
-            "viirsl1",
-            "noaa20",
-            "l1b",
-            tmp_fn
-            )
+    cmd = ("viirsl1", "noaa20", "l1b", tmp_fn)
     LOG.info("----------- command ---------------")
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
     fns = sorted(Path("./").glob("VJ102*.A*.nc"))
     LOG.info(f"{fns=}")
-    assert len(fns)==4
+    assert len(fns) == 4
     LOG.info(f"L1B created: {fns}")
 
 
 def main(
-        collection_id: str,
-        input_: Path,
-        catalog_name: str,
-        file_duration: int,
-        destdir: Path,
-        roles: list[str] | None = None,
-        ):
+    collection_id: str,
+    input_: Path,
+    catalog_name: str,
+    file_duration: int,
+    destdir: Path,
+    roles: list[str] | None = None,
+):
     LOG.info("starting viirsl1:level1b")
     if input_.is_dir():
         catalog = input_ / catalog_name
