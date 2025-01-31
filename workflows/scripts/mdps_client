@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""CLI Client for MDPS API operations.
-"""
+"""CLI Client for MDPS API operations."""
+
 import argparse
 import json
 import logging

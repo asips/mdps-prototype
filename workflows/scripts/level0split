@@ -31,7 +31,9 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
     if data.get("type", "") == "FeatureCollection":
         avail_items = list(ItemCollection.from_dict(data).items)
     else:
-        avail_items = list(Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True))
+        avail_items = list(
+            Catalog.from_dict(data, href=str(fpath)).get_items(recursive=True)
+        )
     LOG.info("%s catalog items", len(avail_items))  # type: ignore
     for item in avail_items:
         LOG.debug(item)
@@ -87,7 +89,9 @@ def split_one(fpath: Path, dest: Path, file_duration: int) -> list[Path]:
         if len(group.packets) == 0 or not group.packets[0].header.has_secondary_header:
             continue
         # packets all have CDS timecodes at start of secondary header
-        timecode = ccsds._decode_jpss_timecode(bytes(group.packets[0].data[6:15])).unix_seconds()
+        timecode = ccsds._decode_jpss_timecode(
+            bytes(group.packets[0].data[6:15])
+        ).unix_seconds()
         bucket = timecode - (timecode % file_duration)
         if bucket not in outputs:
             # first packet for this bucket, create new file in dest with 6t name
