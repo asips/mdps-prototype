@@ -127,7 +127,6 @@ def generate_catalog(
     # catalog.normalize_hrefs(str(basedir.absolute()))
     catalog.make_all_asset_hrefs_relative()
     catalog.save(catalog_type=CatalogType.SELF_CONTAINED)
-
     return catalog
 
 
@@ -155,5 +154,5 @@ if __name__ == "__main__":
         Path(args.file_pattern).absolute(),
         basedir=Path(".").absolute(),
     )
-    if args.verbose:
+    if args.verbose and isinstance(catalog, Catalog):
         catalog.describe(include_hrefs=True)
