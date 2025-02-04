@@ -5,6 +5,7 @@ Asset paths will be relative to the catalog which will be written to CWD.
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -13,10 +14,34 @@ from pathlib import Path
 
 import fnmeta
 import pystac
-from pystac import (Asset, Catalog, CatalogType, Item, ItemCollection, Link,
-                    RelType)
+from pystac import Asset, Catalog, CatalogType, Item, ItemCollection, Link, RelType
 
 LOG = logging.getLogger("catgen")
+
+
+def multihash(path: Path) -> str:
+    """NOT a standard Md5, this returns a multihash as required by the STAC spec.
+
+    The Python multihash lib does not seem to support streaming, so rather than have to read
+    the entire file into memory I just hard-code the multihash prefix for MD5.
+
+    I think it would be possible to use mmap to open a file and use it like bytearray that would
+    be acceptable to the multihash lib, but, REALLY! So dumb!
+
+    Also note, I get the 0xd5 prefix that specifies the Md5 type, but I don't get the next 2
+    0x01, 0x10 that is supposed to specify the value length. It's 16 bytes, which matches the
+    0x10, but what is the leading 0x01? ... something to do with the varint spec?
+
+    See:
+    https://github.com/stac-extensions/file?tab=readme-ov-file
+    https://github.com/multiformats/Multihash
+    https://github.com/multiformats/unsigned-varint
+    """
+    csum = hashlib.md5()
+    with path.open("rb") as fp:
+        while buf := fp.read(4096):
+            csum.update(buf)
+    return f"d50110{csum.hexdigest()}"
 
 
 def get_times(fpath: Path) -> "tuple[datetime, datetime] | None":
@@ -43,36 +68,12 @@ def generate_collection(
             LOG.debug("adding datafile %s", fpath)
             times = get_times(fpath)
             if not times:
-                LOG.warning("failed to determine file times for %s; skipping", fpath.name)
+                LOG.warning(
+                    "failed to determine file times for %s; skipping", fpath.name
+                )
                 continue
             start, end = times
 
-<<<<<<< HEAD
-        try:
-            item = Item(
-                id=fpath.name.rsplit(".", 1)[0],
-                geometry=None,
-                bbox=None,
-                properties={},
-                datetime=start,
-                start_datetime=start,
-                end_datetime=end,
-                # The href will alway automatically be update to be absolute which will
-                # likely break consumers of this collection, so don't set it. Let consumers
-                # assume the asset paths are relateive to basedir.
-                # href=str(basedir),
-                assets={
-                    fpath.name: Asset(
-                        href=str(fpath.relative_to(basedir)), roles=["data"]
-                    ),
-                },
-                **({"collection": collection_id} if collection_id else {}),  # type: ignore
-            )
-            items.append(item)
-        except pystac.STACError:
-            LOG.exception("failed to create or add item for %s", fpath.name)
-            continue
-=======
             try:
                 item = Item(
                     id=fpath.name.rsplit(".", 1)[0],
@@ -82,22 +83,26 @@ def generate_collection(
                     datetime=start,
                     start_datetime=start,
                     end_datetime=end,
-                    # The href will alway automatically be update to be absolute which will 
-                    # likely break consumers of this collection, so don't set it. Let consumers 
+                    # The href will alway automatically be update to be absolute which will
+                    # likely break consumers of this collection, so don't set it. Let consumers
                     # assume the asset paths are relateive to basedir.
                     # href=str(basedir),
                     assets={
                         fpath.name: Asset(
-                            href=str(fpath.relative_to(basedir)), roles=["data"]
+                            href=str(fpath.relative_to(basedir)),
+                            roles=["data"],
+                            extra_fields={
+                                "file:size": fpath.stat().st_size,
+                                "file:checksum": multihash(fpath),
+                            },
                         ),
                     },
-                    collection=collection_id
+                    collection=collection_id,
                 )
                 items.append(item)
             except pystac.STACError:
                 LOG.exception("failed to create or add item for %s", fpath.name)
                 continue
->>>>>>> dec27d4 (support multiple collections)
 
     if len(items) == 0:
         raise ValueError("(catgen) Failed to catalog any files")
@@ -122,7 +127,9 @@ def generate_catalog(
             LOG.debug("adding datafile %s", fpath)
             times = get_times(fpath)
             if not times:
-                LOG.warning("failed to determine file times for %s; skipping", fpath.name)
+                LOG.warning(
+                    "failed to determine file times for %s; skipping", fpath.name
+                )
                 continue
             start, end = times
             try:
@@ -135,7 +142,14 @@ def generate_catalog(
                     start_datetime=start,
                     end_datetime=end,
                     assets={
-                        fpath.name: Asset(href=str(fpath), roles=["data"]),
+                        fpath.name: Asset(
+                            href=str(fpath),
+                            roles=["data"],
+                            extra_fields={
+                                "file:size": fpath.stat().st_size,
+                                "file:checksum": multihash(fpath),
+                            },
+                        )
                     },
                     collection=collection_id,
                 )
@@ -170,7 +184,10 @@ if __name__ == "__main__":
         default="catalog",
         help="Write either a Catalog or FeatureCollection",
     )
+
     def inputtype(v: str) -> tuple[str, Path]:
+        if "," not in v:
+            raise ValueError("Expected <col>,<pattern>")
         r = [s.strip() for s in v.split(",")]
         return r[0], Path(r[1]).absolute()
 
@@ -182,11 +199,10 @@ if __name__ == "__main__":
         help=(
             "Where SPEC is <collection_id>,<file-pattern>; file-pattern is a shell style "
             "glob pattern. Each file found matching file-pattern will be assigned a collection "
-            "id of collection. One or more items must be specified."),
+            "id of collection. One or more items must be specified."
+        ),
     )
     args = parser.parse_args()
-
-    print(args.input)
 
     logging.basicConfig(level=logging.INFO, format="%(name)s -- %(message)s")
     LOG.setLevel(logging.DEBUG if args.verbose else logging.INFO)
