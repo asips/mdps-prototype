@@ -25,7 +25,7 @@ rsync -auv $protodir/local_testing/l0split-outputs/*/P159*T192440006*.PDS .
 rsync -auv $protodir/local_testing/l0split-outputs/*/P159*T192440012*.PDS .
 
 # Run catgen and create a feature collection
-python $protodir/scripts/catgen -t collection "$collection_id" P159\*.PDS
+python $protodir/scripts/catgen -t collection "$collection_id,P159*.PDS"
 mv catalog.json stage-in-results.json
 
 # Move up a directory and write our input yaml
@@ -35,6 +35,7 @@ inputdir:
   class: Directory
   path: ./$collection_id
 granule: "2019-09-01T00:06:00Z"
+stac_json: "stage-in-results.json"
 collection_id: "urn:nasa:unity:asips:int:$collection_id"
 download_type: HTTP
 EOF
@@ -44,5 +45,5 @@ cd $protodir
 # Run cwltool
 cwltool \
     --outdir=./local_testing/l0prep-l1a-outputs/ \
-    $protodir/workflows/viirsl1/l0prep-l1a.combinedtask.cwl \
+    $protodir/workflows/viirsl1/l0prep-l1a.local_testing.cwl \
     $protodir/local_testing/l0prep-l1a-inputs/$collection_id.yaml
