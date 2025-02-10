@@ -5,7 +5,7 @@ id: viirsl1-l1b
 baseCommand: [level1b]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250210
 
 inputs:
   input:

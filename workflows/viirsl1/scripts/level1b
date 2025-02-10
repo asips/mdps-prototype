@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.12
 import argparse
 import json
+import shutil
 import logging
 import subprocess
 from pathlib import Path
@@ -63,15 +64,12 @@ def gather_catalog_inputs(fpath: Path, roles: list[str]) -> list[Path]:
 def run_l1b(input_paths):
     parts = input_paths[0].name.split(".")
     tmp_fn = f"V{parts[1][1:]}{parts[2]}00.L1A_JPSS1.nc"
-    import shutil
-
     shutil.copy(input_paths[0], tmp_fn)
     cmd = ("viirsl1", "noaa20", "l1b", tmp_fn)
     LOG.info("----------- command ---------------")
     LOG.info(f"running: {' '.join(cmd)}")
     run(cmd)
     fns = sorted(Path("./").glob("VJ102*.A*.nc"))
-    LOG.info(f"{fns=}")
     assert len(fns) == 4
     LOG.info(f"L1B created: {fns}")
 
@@ -98,7 +96,9 @@ def main(
             "catgen",
             "--verbose",
             collection_id,
-            f"{destdir}/VJ102*.nc",
+            f"urn:nasa:unity:asips:int:VJ102MOD___1,{destdir}/VJ102MOD*.nc",
+            f"urn:nasa:unity:asips:int:VJ102IMG___1,{destdir}/VJ102IMG*.nc",
+            f"urn:nasa:unity:asips:int:VJ102DNB___1,{destdir}/VJ102DNB*.nc",
         ],
         check=True,
     )

@@ -9,7 +9,7 @@ baseCommand: [level1a-nocat]
 successCodes: [0, 101]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250131-2
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250210
 inputs:
   granule:
     type: string
