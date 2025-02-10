@@ -11,9 +11,8 @@ Assumptions:
 ```
 cd ~/code/mdps-prototype
 bash step0_run_l0split.sh
-bash step1_run_l0prep.sh
-bash step2_run_l1a.sh
-bash step3_run_l1b.sh
+bash step1_run_l0prep-l1a.sh
+bash step2_run_l1b.sh
 ```
 
 Step0 will download 2-hour L0 files from https, after that all other stages will
@@ -22,9 +21,8 @@ use the previous stages outputs
 ## Timings:
 ```
 35 seconds: step0(l0split)
-13 seconds: step1(l0prep)
-13 seconds: step2(l1a)
-28 seconds: step3(l1b)
+20 seconds: step1(l0prep-l1a)
+28 seconds: step2(l1b)
 ```
 
 ## Opinions:

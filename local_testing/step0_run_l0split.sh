@@ -36,7 +36,7 @@ do
     curl -O "$level0_url"
 
     # Run catgen and create a feature collection
-    python $protodir/scripts/catgen -t collection "$collection_id" "$level0_fn"
+    python $protodir/scripts/catgen -t collection "$collection_id,$level0_fn"
 
     # Rename the catalog to stage-in-results.json
     mv catalog.json stage-in-results.json

@@ -20,10 +20,10 @@ mkdir -p $protodir/local_testing/l1b-inputs/$collection_id/
 cd $protodir/local_testing/l1b-inputs/$collection_id/
 
 # start from the l1a otuputs
-rsync -av $protodir/local_testing//l1a-outputs/*/VJ101.*.nc .
+rsync -av $protodir/local_testing/l0prep-l1a-outputs/VJ101.*.nc .
 
 # Run catgen and create a feature collection
-python $protodir/scripts/catgen -t collection "$collection_id" "VJ101.*nc"
+python $protodir/scripts/catgen -t collection "$collection_id,VJ101.*nc"
 
 # Move up a directory and write our input yaml
 cd ../
