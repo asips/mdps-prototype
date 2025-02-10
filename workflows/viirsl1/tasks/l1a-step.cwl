@@ -9,7 +9,7 @@ baseCommand: [level1a]
 successCodes: [0, 101]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250210
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250210-2
 inputs:
   input:
     type: Directory
