@@ -5,7 +5,7 @@ id: viirsl1-geo
 baseCommand: [geolocate]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:latest
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/viirsl1:20250210-3
 
 inputs:
   input:
