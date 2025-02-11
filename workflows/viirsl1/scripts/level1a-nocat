@@ -105,8 +105,7 @@ def main(
             "--verbose",
             "-t",
             "catalog",
-            collection_id,
-            f"{destdir}/V*01.A*.nc",
+            f"{collection_id},{destdir}/V*01.A*.nc",
         ],
         check=True,
     )
