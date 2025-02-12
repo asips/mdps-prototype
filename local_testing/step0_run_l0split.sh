@@ -2,7 +2,7 @@
 
 
 # This is the directory where mdps-prototype is checked out to
-protodir=$HOME/code/mdps-prototype
+protodir=${MDPS_DIR:-$HOME/code/mdps-prototype}
 
 # override the default /tmp that cwltool uses as some steps are large inputs
 export TMPDIR=$protodir/local_testing/tmp/

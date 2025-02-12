@@ -13,7 +13,7 @@ export TMPDIR=tmp/
 collection_id=urn:nasa:unity:asips:int:VJ101___1
 
 # This is the directory where mdps-prototype is checked out to
-protodir=$HOME/code/mdps-prototype
+protodir=${MDPS_DIR:-$HOME/code/mdps-prototype}
 
 # Make a directory to stage our inputs
 mkdir -p $protodir/local_testing/l0prep-l1a-inputs/$collection_id/

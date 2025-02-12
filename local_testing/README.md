@@ -2,7 +2,7 @@
 
 
 Assumptions:
-- this is checked out to ~/code/mdps-prototype
+- this is checked out to $MDPS_DIR (if set) or ~/code/mdps-prototype
 - we are currently in a python env with cwltool and unity-sds installed
 
 ## Note:
