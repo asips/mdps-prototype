@@ -5,6 +5,16 @@ Assumptions:
 - this is checked out to ~/code/mdps-prototype
 - we are currently in a python env with cwltool and unity-sds installed
 
+## Note:
+You have to have the docker images on your machine tagged with the aws name as
+that is what is referenced in the cwl task, for instnace this is the current
+viirsl1 iamge
+```
+$ docker images | head -n2
+REPOSITORY                                                   TAG                 IMAGE ID       CREATED         SIZE
+195353574769.dkr.ecr.us-west-2.amazonaws.com/asips/viirsl1   20250210-3          6533f2bd2af4   41 hours ago    4.94GB
+```
+
 
 ## Running all 4 stages in order:
 
@@ -13,6 +23,7 @@ cd ~/code/mdps-prototype
 bash step0_run_l0split.sh
 bash step1_run_l0prep-l1a.sh
 bash step2_run_l1b.sh
+bash step3_run_geo.sh
 ```
 
 Step0 will download 2-hour L0 files from https, after that all other stages will
@@ -20,9 +31,10 @@ use the previous stages outputs
 
 ## Timings:
 ```
-35 seconds: step0(l0split)
-20 seconds: step1(l0prep-l1a)
-28 seconds: step2(l1b)
+ 35 seconds: step0(l0split)
+ 20 seconds: step1(l0prep-l1a)
+ 28 seconds: step2(l1b)
+386 seconds: step3(geo)
 ```
 
 ## Opinions:
