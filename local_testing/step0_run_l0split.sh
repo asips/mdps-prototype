@@ -1,17 +1,13 @@
 #!/bin/bash
 
 
-#export level0_url=https://sipsdev.ssec.wisc.edu/~steved/P1590008AAAAAAAAAAAAAT19244050215301.PDS
-#export collection_id=P1590008-T
-
-
-# override the default /tmp that cwltool uses as some steps are large inputs
-rm -fr tmp
-mkdir -p tmp
-export TMPDIR=tmp/
-
 # This is the directory where mdps-prototype is checked out to
 protodir=$HOME/code/mdps-prototype
+
+# override the default /tmp that cwltool uses as some steps are large inputs
+export TMPDIR=$protodir/local_testing/tmp/
+rm -fr $TMPDIR
+mkdir -p $TMPDIR
 
 
 for collection_id in 'foo' 'P1590000-T' 'P1590008-T' 'P1590011-T' 'P1590826VIIRSSCIENCE-T' ;
