@@ -19,7 +19,7 @@ REPOSITORY                                                   TAG                
 ## Running all 4 stages in order:
 
 ```
-cd ~/code/mdps-prototype
+cd ~/code/mdps-prototype/local_testing
 bash step0_run_l0split.sh
 bash step1_run_l0prep-l1a.sh
 bash step2_run_l1b.sh
