@@ -149,7 +149,7 @@ def mvcm(
     swdir = Path("/software/mvcm")
     created = datetime.utcnow()
     output = Path(
-        f"CLDMSK_L2_VIIRS_SNPP.{granule:A%Y%j.%H%M}.001.{created:%Y%j%H%M%S}.nc"
+        f"CLDMSK_L2_VIIRS_{satellite.upper()}.{granule:A%Y%j.%H%M}.001.{created:%Y%j%H%M%S}.nc"
     )
     run(
         [
