@@ -4,7 +4,7 @@ class: CommandLineTool
 baseCommand: ["/software/run.py", "--verbose"]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l2
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l2:20240213
 inputs:
   input:
     type: Directory
