@@ -58,7 +58,7 @@ test -d workflows/mvcm_l2/software/l1bscale || install_l1bscale_delivery
 test -d workflows/mvcm_l2/software/demlw-static || install_demlw_static
 
 docker build \
-  --build-arg=basetag=${tag} \
+  --build-arg=basetag=latest \
   -t gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l2:${tag} \
   -f workflows/mvcm_l2/docker/Dockerfile \
   workflows/mvcm_l2
