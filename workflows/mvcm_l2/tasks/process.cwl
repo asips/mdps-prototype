@@ -6,10 +6,10 @@ requirements:
   DockerRequirement:
     dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l2
 inputs:
-  indir:
+  input:
     type: Directory
     inputBinding:
-      prefix: --indir
+      prefix: --input
   collection_id:
     type: string
     inputBinding:

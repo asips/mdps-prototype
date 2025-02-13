@@ -60,7 +60,7 @@ steps:
   process:
     run: tasks/process.cwl
     in:
-      indir: stage_in/stage_in_download_dir
+      input: stage_in/stage_in_download_dir
       collection_id: collection_id
     out: [outdir, outfile]
 

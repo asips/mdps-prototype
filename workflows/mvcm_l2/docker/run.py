@@ -258,20 +258,20 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", action="store_true")
-    parser.add_argument("--indir", type=Path)
+    parser.add_argument("--input", type=Path)
     parser.add_argument("--collection_id")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(name)s -- %(message)s")
     LOG.setLevel(logging.DEBUG if args.verbose else logging.INFO)
 
-    if not args.indir.is_dir() or not args.indir.exists():
-        parser.error(f"Invalid input directory: {args.indir}")
+    if not args.input.is_dir() or not args.input.exists():
+        parser.error(f"Invalid input directory: {args.input}")
 
-    for path in args.indir.glob("*.json"):
+    for path in args.input.glob("*.json"):
         LOG.debug("%s:\n%s", path, json.dumps(json.load(open(path)), indent=2))
 
-    inputs = Inputs.from_dir(args.indir)
+    inputs = Inputs.from_dir(args.input)
     for k, v in asdict(inputs).items():
         LOG.info("input %s -> %s", k, v.absolute())
 
