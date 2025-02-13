@@ -76,7 +76,7 @@ def generate_collection(
 
             try:
                 item = Item(
-                    id=fpath.name.rsplit(".", 1)[0],
+                    id=fpath.name,
                     geometry=None,
                     bbox=None,
                     properties={},
