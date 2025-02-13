@@ -11,9 +11,9 @@ collection_id=CLDMSK_L2_VIIRS_NOAA20
 protodir=${MDPS_DIR:-$HOME/code/mdps-prototype}
 
 # override the default /tmp that cwltool uses as some steps are large inputs
-rm -fr tmp
-mkdir -p tmp
-export TMPDIR=tmp/
+export TMPDIR=$protodir/local_testing/tmp/
+rm -rf $TMPDIR
+mkdir -p $TMPDIR
 
 # Make a directory to stage our inputs
 mkdir -p $protodir/local_testing/mvcm_l2-inputs/$collection_id/
