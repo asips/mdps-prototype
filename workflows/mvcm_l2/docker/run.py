@@ -253,6 +253,24 @@ def generate_catalog(collection_id: str, output: Path):
     run(["catgen", collection_id, str(output)], check=True)
 
 
+def cleanup(output: Path):
+    """Remove anything not in the required outputs."""
+    outputs = [
+        output.name,
+        output.name.replace(".nc", ".json"),
+        "catalog.json",
+    ]
+    for child in Path.cwd().iterdir():
+        if child.is_dir():
+            LOG.info(f"removing directory {child} and contents")
+            shutil.rmtree(child)
+            continue
+        if child.name not in outputs:
+            LOG.info(f"removing {child}")
+            child.unlink()
+    return
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -278,3 +296,4 @@ if __name__ == "__main__":
     output = pipeline(inputs)
 
     generate_catalog(args.collection_id, output)
+    cleanup(output)
