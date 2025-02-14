@@ -8,3 +8,5 @@ inputs/
 outputs/
 cache/
 .venv/
+local_testing/*-inputs
+local_testing/*-outputs

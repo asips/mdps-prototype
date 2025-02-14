@@ -4,12 +4,12 @@ class: CommandLineTool
 baseCommand: ["/software/run_g3.py", "--verbose"]
 requirements:
   DockerRequirement:
-    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l3
+    dockerPull: gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l3:20240214-2
 inputs:
-  indir:
+  input:
     type: Directory
     inputBinding:
-      prefix: --indir
+      prefix: --input
   collection_id:
     type: string
     inputBinding:
