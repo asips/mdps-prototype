@@ -17,7 +17,7 @@ function install_mvcm_preyori_delivery() {
 test -d workflows/mvcm_l3/software/mvcm || install_mvcm_preyori_delivery
 
 docker build \
-  --build-arg=basetag=${tag} \
+  --build-arg=basetag=latest \
   -t gitlab.ssec.wisc.edu:5555/sips/mdps-images/mvcm_l3:${tag} \
   -f workflows/mvcm_l3/docker/Dockerfile \
   workflows/mvcm_l3
