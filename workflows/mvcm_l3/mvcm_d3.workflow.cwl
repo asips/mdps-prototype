@@ -26,7 +26,7 @@ inputs:
     default: "S3"
   unity_client_id:
     type: string
-    default: "40c2s0ulbhp9i0fmaph3su9jch"
+    default: "7vehllplbone6p4usqgutqun35"
   collection_id:
     type: string
     default: urn:nasa:unity:asips:int:CLDMSK_D3_VIIRS_NOAA20.001___1
@@ -52,6 +52,7 @@ steps:
       download_type: download_type
       stac_json: stac_json
       unity_client_id: unity_client_id
+      unity_stac_auth: "UNITY"
     out: [stage_in_download_dir]
 
   process:
