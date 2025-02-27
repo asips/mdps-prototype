@@ -95,9 +95,9 @@ def main(
         [
             "catgen",
             "--verbose",
-            f"urn:nasa:unity:asips:int:VJ102MOD___1,{destdir}/VJ102MOD*.nc",
-            f"urn:nasa:unity:asips:int:VJ102IMG___1,{destdir}/VJ102IMG*.nc",
-            f"urn:nasa:unity:asips:int:VJ102DNB___1,{destdir}/VJ102DNB*.nc",
+            f"urn:nasa:unity:asips:int:VJ102MOD___2,{destdir}/VJ102MOD*.nc",
+            f"urn:nasa:unity:asips:int:VJ102IMG___2,{destdir}/VJ102IMG*.nc",
+            f"urn:nasa:unity:asips:int:VJ102DNB___2,{destdir}/VJ102DNB*.nc",
         ],
         check=True,
     )
