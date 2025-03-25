@@ -5,7 +5,7 @@ id: viirsl1-l1b
 baseCommand: [level1b]
 requirements:
   DockerRequirement:
-    dockerPull: 195353574769.dkr.ecr.us-west-2.amazonaws.com/asips/viirsl1:20250227-1
+    dockerPull: 195353574769.dkr.ecr.us-west-2.amazonaws.com/asips/viirsl1:20250325-1
 
 inputs:
   input:

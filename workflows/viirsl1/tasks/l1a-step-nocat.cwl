@@ -9,7 +9,7 @@ baseCommand: [level1a-nocat]
 successCodes: [0, 101]
 requirements:
   DockerRequirement:
-    dockerPull: 195353574769.dkr.ecr.us-west-2.amazonaws.com/asips/viirsl1:20250210-3
+    dockerPull: 195353574769.dkr.ecr.us-west-2.amazonaws.com/asips/viirsl1:20250325-1
 inputs:
   granule:
     type: string
